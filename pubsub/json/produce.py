@@ -17,7 +17,7 @@ def produce():
         while True:
             stock = {
                 'event_time': datetime.now().isoformat(),
-                'ticker': random.choice(['AAPL', 'AMZN', 'MSFT', 'INTC', 'TBV']),
+                'ticker': random.choice(['IDR', 'USD', 'SGD', 'JPY', 'EUR']),
                 'price': round(random.random() * 100, 2)
             }
             p.produce(TOPIC, key=str(uuid.uuid4), value=json.dumps(stock), callback=delivery_report)
