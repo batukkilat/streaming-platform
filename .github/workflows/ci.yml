@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Ruff
+        run: python -m pip install ruff==0.12.8
+
+      - name: Lint Python
+        run: ruff check pubsub pyspark
+
+      - name: Compile Python
+        run: python -m compileall -q pubsub pyspark
+
+      - name: Validate Compose files
+        run: |
+          for file in \
+            docker/redpanda/docker-compose.yml \
+            docker/redpanda/docker-compose-spark.yml \
+            docker/spark/docker-compose.yml
+          do
+            docker compose -f "$file" config --quiet
+          done
