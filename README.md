@@ -1,5 +1,7 @@
 # Streaming Data Platform: A Hands-On Lab
 
+[![CI](https://github.com/batukkilat/streaming-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/batukkilat/streaming-platform/actions/workflows/ci.yml)
+
 A four-part, build-it-yourself walkthrough of a modern streaming stack: message brokers,
 change data capture, stream SQL, and Spark Structured Streaming. Every part is a working
 `docker-compose` environment plus the notes explaining *why* each piece is there.
