@@ -1,3 +1,18 @@
-.venv
-pubsub/json/__pycache__
-.DS_Store/
+# Secrets / local config — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Spark
+spark-warehouse/
+checkpoint/
+*.crc
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

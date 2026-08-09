@@ -1,6 +1,14 @@
+import os
+
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType, StructField, StructType, DoubleType
 from pyspark.sql.functions import from_json
+
+# Broker and topic come from the environment so the same script runs against a
+# local compose stack or a remote broker. See .env.example.
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "localhost:19092")
+SPARK_TOPIC = os.getenv("SPARK_TOPIC", "stock_json_topic_spark")
+STARTING_OFFSETS = os.getenv("STARTING_OFFSETS", "earliest")
 
 spark_session = SparkSession\
     .builder\
@@ -11,9 +19,9 @@ spark_session = SparkSession\
 stream = spark_session\
     .readStream\
     .format("kafka")\
-    .option("kafka.bootstrap.servers", "localhost:19092")\
-    .option("subscribe", "stock_json_topic_spark")\
-    .option("startingOffsets", "earliest")\
+    .option("kafka.bootstrap.servers", BOOTSTRAP_SERVERS)\
+    .option("subscribe", SPARK_TOPIC)\
+    .option("startingOffsets", STARTING_OFFSETS)\
     .load()
 
 spark_session.sparkContext.setLogLevel('WARN')

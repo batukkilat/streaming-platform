@@ -1,0 +1,4 @@
+confluent-kafka
+kafka-python
+pyspark==3.3.0
+python-dotenv

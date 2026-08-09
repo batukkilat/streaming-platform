@@ -1,13 +1,13 @@
 from confluent_kafka import Consumer, KafkaException, KafkaError
-from config import TOPIC
+from config import AUTO_OFFSET_RESET, BOOTSTRAP_SERVERS, CONSUMER_GROUP_ID, TOPIC
 
 
 def consume():
     # Configure the Consumer
     c = Consumer({
-        'bootstrap.servers': 'localhost:19092',  # Assuming you're running this on the same machine as the compose
-        'group.id': 'python-consumer',
-        'auto.offset.reset': 'latest'
+        'bootstrap.servers': BOOTSTRAP_SERVERS,
+        'group.id': CONSUMER_GROUP_ID,
+        'auto.offset.reset': AUTO_OFFSET_RESET
     })
 
     # Subscribe to the topic

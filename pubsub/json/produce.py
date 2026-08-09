@@ -3,13 +3,13 @@ from datetime import datetime
 import random
 import json
 import uuid
-from config import TOPIC
+from config import BOOTSTRAP_SERVERS, PRODUCER_CLIENT_ID, TOPIC
 
 def produce():
     # Configure the Producer
     p = Producer({
-        'bootstrap.servers': 'localhost:19092',  # Assuming you're running this on the same machine as the compose
-        'client.id': 'python-producer'
+        'bootstrap.servers': BOOTSTRAP_SERVERS,
+        'client.id': PRODUCER_CLIENT_ID
     })
 
     # Produce a message

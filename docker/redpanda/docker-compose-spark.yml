@@ -24,14 +24,14 @@ services:
       # from inside the same Docker network.
       # Use the external addresses to connect to the Redpanda brokers
       # from outside the Docker network.
-      - --advertise-kafka-addr internal://172.24.1.4:9092,external://localhost:19092
+      - --advertise-kafka-addr internal://${REDPANDA_ADDR:-172.24.1.4}:9092,external://localhost:19092
       - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
       # Address the broker advertises to clients that connect to the HTTP Proxy.
-      - --advertise-pandaproxy-addr internal://172.24.1.4:8082,external://localhost:18082
+      - --advertise-pandaproxy-addr internal://${REDPANDA_ADDR:-172.24.1.4}:8082,external://localhost:18082
       - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
       # Redpanda brokers use the RPC API to communicate with each other internally.
-      - --rpc-addr 172.24.1.4:33145
-      - --advertise-rpc-addr 172.24.1.4:33145
+      - --rpc-addr ${REDPANDA_ADDR:-172.24.1.4}:33145
+      - --advertise-rpc-addr ${REDPANDA_ADDR:-172.24.1.4}:33145
       - --mode dev-container
     ports:
       - 18081:18081
@@ -40,7 +40,7 @@ services:
       - 19644:9644
     networks:
       redpanda_network:
-        ipv4_address: '172.24.1.4'
+        ipv4_address: '${REDPANDA_ADDR:-172.24.1.4}'
     healthcheck:
       test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
       interval: 15s
@@ -57,14 +57,14 @@ services:
       CONFIG_FILEPATH: /tmp/config.yml
       CONSOLE_CONFIG_FILE: |
         kafka:
-          brokers: ["172.24.1.4:9092"]
+          brokers: ["${REDPANDA_ADDR:-172.24.1.4}:9092"]
           schemaRegistry:
             enabled: true
-            urls: ["http://172.24.1.4:8081"]
+            urls: ["http://${REDPANDA_ADDR:-172.24.1.4}:8081"]
         redpanda:
           adminApi:
             enabled: true
-            urls: ["http://172.24.1.4:9644"]
+            urls: ["http://${REDPANDA_ADDR:-172.24.1.4}:9644"]
         connect:
           enabled: true
           clusters:
@@ -83,7 +83,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      BOOTSTRAP_SERVERS: "172.24.1.4:9092"
+      BOOTSTRAP_SERVERS: "${REDPANDA_ADDR:-172.24.1.4}:9092"
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
@@ -111,7 +111,7 @@ services:
     networks:
       - redpanda_network
     environment:
-      KSQL_BOOTSTRAP_SERVERS: "172.24.1.4:9092"
+      KSQL_BOOTSTRAP_SERVERS: "${REDPANDA_ADDR:-172.24.1.4}:9092"
       KSQL_LISTENERS: "http://0.0.0.0:8088"
       KSQL_CACHE_MAX_BYTES_BUFFERING: 0
 
